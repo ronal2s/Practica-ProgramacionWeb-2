@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/public/layout.html::header">
+    <title>Home</title>
+</head>
+<body>
+<div th:insert="/public/layout.html::navbar"/>
+
+<!--        Productos-->
+<div class="align-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div>
+                    <h1 class="display-4">Cart list</h1>
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/cart/confirm" method="post" >
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="customer" placeholder="Customer name"  >
+                                    <button class="btn btn-secondary" type="submit" >Confirm payment</button>
+                                </div>
+                            </form>
+                            <form action="/cart/clear" method="post">
+                                <button class="btn btn-secondary" type="submit" >Clear cart</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="separator"/>
+                </div>
+<!--                <div th:each="sale : ${sales}">-->
+<!--                    <h1 th:text="${sale.quantity}" />-->
+<!--                    <h1 th:text="${sale.product.name}"/>-->
+<!--                </div>-->
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price (RD$)</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total (RD$)</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sale : ${sales}">
+                        <td th:text="${sale.product.name}"/>
+                        <td th:text="${sale.product.price}"/>
+                        <td th:text="${sale.quantity}"/>
+                        <td th:text="${sale.quantity * sale.product.price}"/>
+<!--                        <td th:text="${product.price}"/>-->
+                        <td>
+                            <div class="flex" >
+                                <form action="/cart/delete" method="post" >
+                                    <input class="hide" type="text" name="id" th:value="${sale.product.id}" />
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-secondary" type="submit" >Delete</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div th:insert="/public/layout.html::javascript"></div>
+</html>
