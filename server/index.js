@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const app = express();
 const router = express.Router();
 const port = process.env.PORT || 5000;
-const { Db } = require("mongodb");
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/mydb";
@@ -14,13 +13,37 @@ const { COLLECTIONS } = require("./utils/constants");
 
 
 const data_articulos = [
-  { codigoArticulo: "1", descripcion: "Keyboard", balanceActual: "5", unidadCompra: "100" },
-  { codigoArticulo: "2", descripcion: "Mouse", balanceActual: "7", unidadCompra: "100" },
-  { codigoArticulo: "3", descripcion: "Monitor", balanceActual: "3", unidadCompra: "2500" },
-  { codigoArticulo: "4", descripcion: "Cable USB", balanceActual: "8", unidadCompra: "100" },
-  { codigoArticulo: "5", descripcion: "Cable HDMI", balanceActual: "19", unidadCompra: "100" },
-  { codigoArticulo: "6", descripcion: "Headphones", balanceActual: "11", unidadCompra: "800" },
-  { codigoArticulo: "7", descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
+  { codigoArticulo: 1, descripcion: "Keyboard", balanceActual: "5", unidadCompra: "100" },
+  { codigoArticulo: 2, descripcion: "Mouse", balanceActual: "7", unidadCompra: "100" },
+  { codigoArticulo: 3, descripcion: "Monitor", balanceActual: "3", unidadCompra: "2500" },
+  { codigoArticulo: 4, descripcion: "Cable USB", balanceActual: "8", unidadCompra: "100" },
+  { codigoArticulo: 5, descripcion: "Cable HDMI", balanceActual: "19", unidadCompra: "100" },
+  { codigoArticulo: 6, descripcion: "Headphones", balanceActual: "11", unidadCompra: "800" },
+  { codigoArticulo: 7, descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
+]
+
+const data_articulo_suplidor = [
+  { codigoArticulo: 1, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: 1, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: 1, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: 2, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: 2, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: 2, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: 3, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 2100 },
+  { codigoArticulo: 3, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 2400 },
+  { codigoArticulo: 3, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 1700 },
+  { codigoArticulo: 4, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: 4, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: 4, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: 5, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: 5, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: 5, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: 6, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 700 },
+  { codigoArticulo: 6, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 750 },
+  { codigoArticulo: 6, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 600 },
+  { codigoArticulo: 7, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 2200 },
+  { codigoArticulo: 7, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 2400 },
+  { codigoArticulo: 7, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 1800 },
 ]
 
 
@@ -31,30 +54,20 @@ MongoClient.connect(url, function (err, db) {
   createCollection(COLLECTIONS.ARTICULOS, dbo);
   deleteCollection(COLLECTIONS.ARTICULOS, dbo);
   putData(COLLECTIONS.ARTICULOS, dbo, data_articulos);
+  putData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, data_articulo_suplidor);
 
   app.get("/inventario", (req, res) => {
     getData(COLLECTIONS.ARTICULOS, dbo, (result) => res.send(result));
-  })
+  });
 
-  // app.route("/inventario")
-  //   .get((req, res) => {
-
-  //   })
-  //   .post((req, res) => {
-  //     const obj = req.body;
-  //     putData(COLLECTIONS.ARTICULOS, dbo, obj, (result) => res.sendStatus(200))
-  //   })
+  app.get("/suplidor", (req, res) => {
+    getData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, (result) => res.send(result));
+  });
 
   getData(COLLECTIONS.ARTICULOS, dbo);
   // db.close();
 });
 
-const deleteCollection = (nameCollection, dbo, callback) => {
-  dbo.collection(nameCollection).remove()
-    .then(result => { if (callback) callback(result); })
-    .catch(error => console.error(error));
-
-}
 
 const putData = (nameCollection, dbo, obj, callback) => {
   const typeInsert = Array.isArray(obj) ? "insertMany" : "insertOne";
@@ -88,6 +101,12 @@ const createCollection = (nameCollection, dbo, callback) => {
   }
 }
 
+
+const deleteCollection = (nameCollection, dbo, callback) => {
+  dbo.collection(nameCollection).remove()
+    .then(result => { if (callback) callback(result); })
+    .catch(error => console.error(error));
+}
 
 app.get("/", (req, res) => {
   res.render("index");
