@@ -75,7 +75,7 @@ MongoClient.connect(url, function (err, db) {
   })
 
   app.get("/ventas/nueva", (req, res) => {
-    const { cliente, articulo, cantidad } = req.query;
+    const { cliente, articulo, cantidad, fecha } = req.query;
     console.log(req.query)
     getData(COLLECTIONS.VENTAS, dbo, (result) => {
       const obj = { name: "codigoArticulo", value: articulo }
@@ -83,7 +83,7 @@ MongoClient.connect(url, function (err, db) {
         if (parseInt(cantidad) < result.balanceActual) {
           const obj = { id: result._id, value: { balanceActual: result.balanceActual - 1 } };
           updateItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
-            const obj = { codigoArticulo: articulo, cantidad, cliente }
+            const obj = { codigoArticulo: articulo, cantidad, cliente, fecha }
             putData(COLLECTIONS.VENTAS, dbo, obj, (result) => {
               res.send({ error: false, ...result })
             })

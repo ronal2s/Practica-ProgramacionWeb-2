@@ -54,6 +54,7 @@ function Route2(props: any) {
                                 { title: "Cliente", field: "cliente" },
                                 { title: "Articulo", field: "codigoArticulo" },
                                 { title: "Cantidad Salida", field: "cantidad", },
+                                { title: "Fecha", field: "fecha", render: (rowData: { fecha: Date }) => new Date(rowData.fecha).toLocaleDateString() }
                                 // { title: "Cantidad Entrada", field: "cantidad_entrada", },
                             ]}
                             isLoading={loading}
