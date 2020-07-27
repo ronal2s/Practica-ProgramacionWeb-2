@@ -22,6 +22,21 @@ const data_articulos = [
   { codigoArticulo: "ART-07", descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
 ]
 
+const data_ventas = [
+  { codigoArticulo: "ART-01", cantidad: 2, cliente: "Juan", fecha: "04/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 1, cliente: "Pedro", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 4, cliente: "Miguel", fecha: "09/08/2020" },
+  // {
+  //   _id: "5f1f54332db579308403d8b7",
+  //   codigoArticulo: "ART-01",
+  //   cantidad: "2",
+  //   cliente: "bbbbb",
+  //   fecha: "27/7/2020"
+  //   }
+]
+
+
+
 const data_articulo_suplidor = [
   { codigoArticulo: "ART-01", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 50 },
   { codigoArticulo: "ART-01", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 85 },
@@ -55,10 +70,13 @@ MongoClient.connect(url, function (err, db) {
   deleteCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
   deleteCollection(COLLECTIONS.VENTAS, dbo);
 
+  createCollection(COLLECTIONS.VENTAS, dbo);
   createCollection(COLLECTIONS.ARTICULOS, dbo);
   createCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
+
   putData(COLLECTIONS.ARTICULOS, dbo, data_articulos);
   putData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, data_articulo_suplidor);
+  // putData(COLLECTIONS.VENTAS, dbo, data_ventas);
 
   app.get("/inventario", (req, res) => {
     getData(COLLECTIONS.ARTICULOS, dbo, (result) => res.send(result));
@@ -68,6 +86,12 @@ MongoClient.connect(url, function (err, db) {
     getData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, (result) => res.send(result));
   });
 
+  app.get("/consumos", (req, res) => {
+    getConsumos(dbo, (result) => {
+      res.send(result);
+    })
+  })
+
   app.get("/ventas", (req, res) => {
     getData(COLLECTIONS.VENTAS, dbo, (result) => {
       res.send(result)
@@ -76,20 +100,20 @@ MongoClient.connect(url, function (err, db) {
 
   app.get("/ventas/nueva", (req, res) => {
     const { cliente, articulo, cantidad, fecha } = req.query;
-    console.log(req.query)
+    console.log("Query: ", req.query)
     getData(COLLECTIONS.VENTAS, dbo, (result) => {
       const obj = { name: "codigoArticulo", value: articulo }
       getSingleItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
         if (parseInt(cantidad) < result.balanceActual) {
           const obj = { id: result._id, value: { balanceActual: result.balanceActual - 1 } };
           updateItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
-            const obj = { codigoArticulo: articulo, cantidad, cliente, fecha }
+            const obj = { codigoArticulo: articulo, cantidad: parseInt(cantidad), cliente, fecha }
             putData(COLLECTIONS.VENTAS, dbo, obj, (result) => {
               res.send({ error: false, ...result })
             })
           })
         } else {
-          res.send({error: true, msg: `La cantidad es mayor al balance disponible: ${result.balanceActual}`})
+          res.send({ error: true, msg: `La cantidad es mayor al balance disponible: ${result.balanceActual}` })
         }
       })
     })
@@ -99,6 +123,17 @@ MongoClient.connect(url, function (err, db) {
   getData(COLLECTIONS.ARTICULOS, dbo);
   // db.close();
 });
+
+const getConsumos = (dbo, callback) => {
+  dbo.collection(COLLECTIONS.VENTAS).aggregate([
+    { $group: { _id: { codigoArticulo: "$codigoArticulo", fecha: "$fecha" }, total: { $sum: "$cantidad" } } }
+  ]).toArray()
+    .then(result => {
+      callback(result);
+      // res.send(result);
+    })
+    .catch(error => alert(error))
+}
 
 
 const putData = (nameCollection, dbo, obj, callback) => {

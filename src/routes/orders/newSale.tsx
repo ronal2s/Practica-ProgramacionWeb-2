@@ -9,14 +9,14 @@ import axios from "axios";
 
 import TextField from "../../components/_textField";
 
-interface IModalSale {
+interface IModalOrder {
     open: boolean,
     onClose: () => void,
 
 }
 
-function ModalSale(props: IModalSale) {
-    const [form, setForm] = useState({ articulo: "ART-01", cliente: "Juan", cantidad: "1", fecha: new Date() });
+function ModalOrder(props: IModalOrder) {
+    const [form, setForm] = useState({ articulo: "", suplidor: "", cantidad: "", fecha: new Date() });
 
     const handleInputs = (name: string, value: any) => {
         // if (name == "date") {
@@ -26,32 +26,19 @@ function ModalSale(props: IModalSale) {
     }
 
     const makeSale = () => {
-        axios.get("/ventas/nueva", { params: {
-            cliente: form.cliente,
-            articulo: form.articulo,
-            cantidad: form.cantidad,
-            fecha: new Date(form.fecha).toLocaleDateString()
-        } })
-            .then(result => {
-                if (!result.data.error) {
-                    props.onClose();
-                } else {
-                    alert(result.data.msg)
-                }
-            })
-            .catch(error => alert(error))
+        alert("Workin in")
     }
 
 
     return (
         <Dialog open={props.open} onClose={props.onClose} >
-            <DialogTitle>Nueva venta</DialogTitle>
+            <DialogTitle>Generar orden</DialogTitle>
             <DialogContent>
                 <FormControl>
                     <MuiPickersUtilsProvider utils={MomentUtils}>
                         <DatePicker value={form.fecha} onChange={(date) => handleInputs("fecha", date)} />
-                        <TextField label="Cliente" name="cliente" value={form.cliente} onChange={handleInputs} />
-                        <TextField label="Artículo" name="articulo" value={form.articulo} onChange={handleInputs} />
+                        <TextField label="Cod Suplidor" name="suplidor" value={form.suplidor} onChange={handleInputs} />
+                        <TextField label="Cod Articulo" name="articulo" value={form.articulo} onChange={handleInputs} />
                         <TextField label="Cantidad" name="cantidad" value={form.cantidad} onChange={handleInputs} />
                     </MuiPickersUtilsProvider>
 
@@ -65,4 +52,4 @@ function ModalSale(props: IModalSale) {
     )
 }
 
-export default ModalSale;
+export default ModalOrder;

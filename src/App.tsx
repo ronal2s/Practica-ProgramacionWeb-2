@@ -8,6 +8,7 @@ import ProductsSupplier from './routes/productsSuppliers';
 import Inventory from './routes/inventory';
 import Consumption from './routes/consumption';
 import Sales from './routes/sales';
+import Orders from './routes/orders';
 //Custom components
 import CustomAppBar from './components/appbar';
 import CustomLink from './components/listItem';
@@ -57,6 +58,7 @@ function App() {
               <CustomLink title="Inventario" icon="mail" iconColor="white" nameView="/inventario" actualRoute={actualRoute} onClick={onClickItem} />
               <CustomLink title="Art. Suplidores" icon="mail" iconColor="white" nameView="/suplidores" actualRoute={actualRoute} onClick={onClickItem} />
               <CustomLink title="Consumos" icon="mail" iconColor="white" nameView="/consumos" actualRoute={actualRoute} onClick={onClickItem} />
+              <CustomLink title="Ordenes" icon="mail" iconColor="white" nameView="/ordenes" actualRoute={actualRoute} onClick={onClickItem} />
             </List>
           </CustomDrawer>
           <NavigationView>
@@ -69,6 +71,7 @@ function App() {
                 <Route path="/inventario" component={Inventory} />
                 <Route path="/suplidores" component={ProductsSupplier} />
                 <Route path="/consumos" component={Consumption} />
+                <Route path="/ordenes" component={Orders} />
               </Switch>
             </ContentView>
           </NavigationView>

@@ -7,13 +7,13 @@ import ModalNewSale from "./newSale";
 //Utils
 import { isMobile } from "../../utils/functions";
 
-function Sales(props: any) {
+function Orders(props: any) {
     const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState(false);
     const [data, setdata] = useState([]);
 
     useEffect(() => {
-        getData();
+        // getData();
     }, [])
 
     const getData = () => {
@@ -43,7 +43,7 @@ function Sales(props: any) {
                         {/* <Typography variant="h2">Inventario</Typography> */}
                         <MaterialTable
                             style={{ width: isMobile() ? 350 : "100%" }}
-                            title="Ventas"
+                            title="Ordenes"
                             options={{
                                 exportButton: true,
                                 search: false
@@ -51,9 +51,9 @@ function Sales(props: any) {
                             columns={[
                                 // { title: "Código Movimiento", field: "codigo" },
                                 // { title: "Fecha", field: "fecha" },
-                                { title: "Cliente", field: "cliente" },
+                                { title: "Suplidor", field: "codigoSuplido" },
                                 { title: "Articulo", field: "codigoArticulo" },
-                                { title: "Cantidad Salida", field: "cantidad", },
+                                { title: "Cantidad", field: "cantidad", },
                                 // { title: "Fecha", field: "fecha", render: (rowData: { fecha: Date }) => new Date(rowData.fecha).toLocaleDateString() }
                                 { title: "Fecha", field: "fecha", }
                                 // { title: "Cantidad Entrada", field: "cantidad_entrada", },
@@ -63,7 +63,7 @@ function Sales(props: any) {
                         />
                         <br />
                         <div style={{ marginLeft: 10 }} >
-                            <Button variant="contained" color="primary" onClick={openmodal} >Nueva venta</Button>
+                            <Button variant="contained" color="primary" onClick={openmodal} >Nueva orden</Button>
                         </div>
                         <br />
                     </Paper>
@@ -74,4 +74,4 @@ function Sales(props: any) {
     )
 }
 
-export default Sales;
+export default Orders;

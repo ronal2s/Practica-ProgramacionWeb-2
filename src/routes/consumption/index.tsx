@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
+import axios from "axios";
 import { Grid, Paper } from "@material-ui/core";
 import { isMobile } from "../../utils/functions";
 
 function ProductsSupplier(props: any) {
     const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = () => {
+        axios.get("/consumos")
+            .then(result => {
+                setData(result.data)
+            })
+            .catch(error => alert(error));
+    }
 
     const example = [
-        { codigo_articulo: "TEC-001", cantidad: "5,00" },                
+        { codigo_articulo: "TEC-001", cantidad: "5,00" },
     ]
 
     return (
@@ -23,11 +37,12 @@ function ProductsSupplier(props: any) {
                                 search: false
                             }}
                             columns={[
-                                { title: "Codigo Articulo", field: "codigo_articulo" },
-                                { title: "Cantidad", field: "cantidad" },
+                                { title: "Codigo Articulo", field: "codigo_articulo", render: (rowData: { _id: any }) => rowData._id.codigoArticulo },
+                                { title: "Cantidad", field: "total" },
+                                { title: "Fecha", field: "fecha", render: (rowData: { _id: any }) => rowData._id.fecha },
                             ]}
                             isLoading={loading}
-                            data={example}
+                            data={data}
                         />
                     </Paper>
                 </Grid>
