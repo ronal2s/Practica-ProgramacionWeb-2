@@ -13,37 +13,37 @@ const { COLLECTIONS } = require("./utils/constants");
 
 
 const data_articulos = [
-  { codigoArticulo: 1, descripcion: "Keyboard", balanceActual: "5", unidadCompra: "100" },
-  { codigoArticulo: 2, descripcion: "Mouse", balanceActual: "7", unidadCompra: "100" },
-  { codigoArticulo: 3, descripcion: "Monitor", balanceActual: "3", unidadCompra: "2500" },
-  { codigoArticulo: 4, descripcion: "Cable USB", balanceActual: "8", unidadCompra: "100" },
-  { codigoArticulo: 5, descripcion: "Cable HDMI", balanceActual: "19", unidadCompra: "100" },
-  { codigoArticulo: 6, descripcion: "Headphones", balanceActual: "11", unidadCompra: "800" },
-  { codigoArticulo: 7, descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
+  { codigoArticulo: "ART-01", descripcion: "Keyboard", balanceActual: "5", unidadCompra: "100" },
+  { codigoArticulo: "ART-02", descripcion: "Mouse", balanceActual: "7", unidadCompra: "100" },
+  { codigoArticulo: "ART-03", descripcion: "Monitor", balanceActual: "3", unidadCompra: "2500" },
+  { codigoArticulo: "ART-04", descripcion: "Cable USB", balanceActual: "8", unidadCompra: "100" },
+  { codigoArticulo: "ART-05", descripcion: "Cable HDMI", balanceActual: "19", unidadCompra: "100" },
+  { codigoArticulo: "ART-06", descripcion: "Headphones", balanceActual: "11", unidadCompra: "800" },
+  { codigoArticulo: "ART-07", descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
 ]
 
 const data_articulo_suplidor = [
-  { codigoArticulo: 1, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
-  { codigoArticulo: 1, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
-  { codigoArticulo: 1, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
-  { codigoArticulo: 2, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
-  { codigoArticulo: 2, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
-  { codigoArticulo: 2, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
-  { codigoArticulo: 3, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 2100 },
-  { codigoArticulo: 3, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 2400 },
-  { codigoArticulo: 3, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 1700 },
-  { codigoArticulo: 4, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
-  { codigoArticulo: 4, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
-  { codigoArticulo: 4, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
-  { codigoArticulo: 5, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 50 },
-  { codigoArticulo: 5, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 85 },
-  { codigoArticulo: 5, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 50 },
-  { codigoArticulo: 6, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 700 },
-  { codigoArticulo: 6, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 750 },
-  { codigoArticulo: 6, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 600 },
-  { codigoArticulo: 7, codigoSuplidor: 1, tiempoEntrega: 3, precioCompra: 2200 },
-  { codigoArticulo: 7, codigoSuplidor: 2, tiempoEntrega: 1, precioCompra: 2400 },
-  { codigoArticulo: 7, codigoSuplidor: 3, tiempoEntrega: 5, precioCompra: 1800 },
+  { codigoArticulo: "ART-01", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: "ART-01", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: "ART-01", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: "ART-02", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: "ART-02", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: "ART-02", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: "ART-03", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 2100 },
+  { codigoArticulo: "ART-03", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 2400 },
+  { codigoArticulo: "ART-03", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 1700 },
+  { codigoArticulo: "ART-04", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: "ART-04", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: "ART-04", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: "ART-05", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 50 },
+  { codigoArticulo: "ART-05", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 85 },
+  { codigoArticulo: "ART-05", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 50 },
+  { codigoArticulo: "ART-06", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 700 },
+  { codigoArticulo: "ART-06", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 750 },
+  { codigoArticulo: "ART-06", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 600 },
+  { codigoArticulo: "ART-07", codigoSuplidor: "SUP-01", tiempoEntrega: 3, precioCompra: 2200 },
+  { codigoArticulo: "ART-07", codigoSuplidor: "SUP-02", tiempoEntrega: 1, precioCompra: 2400 },
+  { codigoArticulo: "ART-07", codigoSuplidor: "SUP-03", tiempoEntrega: 5, precioCompra: 1800 },
 ]
 
 
@@ -51,8 +51,12 @@ MongoClient.connect(url, function (err, db) {
   if (err) throw err;
   const dbo = db.db("test");
 
-  createCollection(COLLECTIONS.ARTICULOS, dbo);
   deleteCollection(COLLECTIONS.ARTICULOS, dbo);
+  deleteCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
+  deleteCollection(COLLECTIONS.VENTAS, dbo);
+
+  createCollection(COLLECTIONS.ARTICULOS, dbo);
+  createCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
   putData(COLLECTIONS.ARTICULOS, dbo, data_articulos);
   putData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, data_articulo_suplidor);
 
@@ -63,6 +67,34 @@ MongoClient.connect(url, function (err, db) {
   app.get("/suplidor", (req, res) => {
     getData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, (result) => res.send(result));
   });
+
+  app.get("/ventas", (req, res) => {
+    getData(COLLECTIONS.VENTAS, dbo, (result) => {
+      res.send(result)
+    })
+  })
+
+  app.get("/ventas/nueva", (req, res) => {
+    const { cliente, articulo, cantidad } = req.query;
+    console.log(req.query)
+    getData(COLLECTIONS.VENTAS, dbo, (result) => {
+      const obj = { name: "codigoArticulo", value: articulo }
+      getSingleItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
+        if (parseInt(cantidad) < result.balanceActual) {
+          const obj = { id: result._id, value: { balanceActual: result.balanceActual - 1 } };
+          updateItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
+            const obj = { codigoArticulo: articulo, cantidad, cliente }
+            putData(COLLECTIONS.VENTAS, dbo, obj, (result) => {
+              res.send({ error: false, ...result })
+            })
+          })
+        } else {
+          res.send({error: true, msg: `La cantidad es mayor al balance disponible: ${result.balanceActual}`})
+        }
+      })
+    })
+  });
+
 
   getData(COLLECTIONS.ARTICULOS, dbo);
   // db.close();
@@ -81,6 +113,15 @@ const putData = (nameCollection, dbo, obj, callback) => {
   })
 }
 
+const getSingleItem = (nameCollection, dbo, obj, callback) => {
+  console.log(obj)
+  dbo.collection(nameCollection).find({ [obj.name]: obj.value }).toArray((error, result) => {
+    if (error) throw error;
+    // console.log(`${nameCollection} results: `, result);
+    if (callback) callback(result[0]);
+  })
+}
+
 const getData = (nameCollection, dbo, callback) => {
   dbo.collection(nameCollection).find().toArray((error, result) => {
     if (error) throw error;
@@ -89,6 +130,13 @@ const getData = (nameCollection, dbo, callback) => {
   })
 }
 
+const updateItem = (nameCollection, dbo, obj, callback) => {
+  dbo.collection(nameCollection).update({ _id: obj.id }, { $set: { ...obj.value } })
+    .then(result => {
+      callback(result)
+    })
+    .catch(error => console.error(error))
+}
 
 
 const createCollection = (nameCollection, dbo, callback) => {

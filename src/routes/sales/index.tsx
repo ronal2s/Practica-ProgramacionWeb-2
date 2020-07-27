@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import { Grid, Paper, Button } from "@material-ui/core";
+import axios from "axios";
 //Modals
 import ModalNewSale from "./newSale";
 //Utils
@@ -9,6 +10,19 @@ import { isMobile } from "../../utils/functions";
 function Route2(props: any) {
     const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState(false);
+    const [data, setdata] = useState([]);
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = () => {
+        axios.get("/ventas")
+            .then(result => {
+                setdata(result.data)
+            })
+            .catch(error => alert(error));
+    }
 
     const example = [
         { codigo: "1", fecha: "####", articulo: "ART-001", cantidad_salida: "5", cantidad_entrada: 100 },
@@ -16,7 +30,10 @@ function Route2(props: any) {
 
     const openmodal = () => setModal(true);
 
-    const closemodal = () => setModal(false);
+    const closemodal = () => {
+        getData();
+        setModal(false);
+    }
 
     return (
         <React.Fragment>
@@ -32,14 +49,15 @@ function Route2(props: any) {
                                 search: false
                             }}
                             columns={[
-                                { title: "Código Movimiento", field: "codigo" },
-                                { title: "Fecha", field: "fecha" },
-                                { title: "Articulo", field: "articulo" },
-                                { title: "Cantidad Salida", field: "cantidad_salida", },
-                                { title: "Cantidad Entrada", field: "cantidad_entrada", },
+                                // { title: "Código Movimiento", field: "codigo" },
+                                // { title: "Fecha", field: "fecha" },
+                                { title: "Cliente", field: "cliente" },
+                                { title: "Articulo", field: "codigoArticulo" },
+                                { title: "Cantidad Salida", field: "cantidad", },
+                                // { title: "Cantidad Entrada", field: "cantidad_entrada", },
                             ]}
                             isLoading={loading}
-                            data={example}
+                            data={data}
                         />
                         <br />
                         <div style={{ marginLeft: 10 }} >
