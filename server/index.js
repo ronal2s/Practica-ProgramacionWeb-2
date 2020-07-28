@@ -131,8 +131,8 @@ MongoClient.connect(url, function (err, db) {
   })
 
   app.get("/ordenes/nueva", (req, res) => {
-    const { fecha, articulo, suplidor, cantidad } = req.query;
-    // console.log(req.query)
+    const { fecha, articulo, incluirConsumoDiario, cantidad } = req.query;
+    console.log(req.query)
     dbo.collection(COLLECTIONS.ARTICULOS_SUPLIDOR).find({ codigoArticulo: articulo }).toArray()
       .then(result => {
         // console.log(result)
@@ -145,17 +145,39 @@ MongoClient.connect(url, function (err, db) {
           console.log(fechaRequest, fechaFutura)
           if (fechaRequest == fechaFutura) {
             console.log("Suplidor disponible: ", element)
-            const requestData = {
-              codigoArticulo: element.codigoArticulo,
-              codigoSuplidor: element.codigoSuplidor,
-              tiempoEntrega: element.tiempoEntrega,
-              precioCompra: element.precioCompra,
-              fechaEstimada: fechaFutura,
-              cantidad
+            if (incluirConsumoDiario == 'true') {
+              getConsumos(dbo, (consumos) => {
+                for (let j = 0; j < consumos.length; j++) {
+                  const consumo = consumos[j];
+                  if (consumo._id == articulo) {
+                    const requestData = {
+                      codigoArticulo: element.codigoArticulo,
+                      codigoSuplidor: element.codigoSuplidor,
+                      tiempoEntrega: element.tiempoEntrega,
+                      precioCompra: element.precioCompra,
+                      fechaEstimada: fechaFutura,
+                      cantidad: parseInt(cantidad) + Math.round(consumo.avgQuantity)
+                    }
+                    putData(COLLECTIONS.ORDENES, dbo, requestData, (result) => {
+                      res.send({ error: false, msg: "Orden realizada" });
+                    });
+                  }
+                }
+              })
             }
-            putData(COLLECTIONS.ORDENES, dbo, requestData, (result) => {
-              res.send({ error: false, msg: "Orden realizada" });
-            });
+            else {
+              const requestData = {
+                codigoArticulo: element.codigoArticulo,
+                codigoSuplidor: element.codigoSuplidor,
+                tiempoEntrega: element.tiempoEntrega,
+                precioCompra: element.precioCompra,
+                fechaEstimada: fechaFutura,
+                cantidad
+              }
+              putData(COLLECTIONS.ORDENES, dbo, requestData, (result) => {
+                res.send({ error: false, msg: "Orden realizada" });
+              });
+            }
             break;
           } else {
             res.send({ error: true, msg: "No hay suplidor disponible para esa fecha" });

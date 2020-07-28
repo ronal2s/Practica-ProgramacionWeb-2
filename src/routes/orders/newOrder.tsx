@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button, FormControlLabel, Checkbox } from "@material-ui/core";
 import { toast } from 'react-toastify';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+
 import MomentUtils from '@date-io/moment';
 import {
     DatePicker,
@@ -17,7 +18,7 @@ interface IModalOrder {
 }
 
 function ModalOrder(props: IModalOrder) {
-    const [form, setForm] = useState({ articulo: "ART-01", suplidor: "SUP-01", cantidad: "10", fecha: new Date() });
+    const [form, setForm] = useState({ articulo: "ART-01", suplidor: "SUP-01", cantidad: "10", fecha: new Date(), incluirConsumoDiario: false });
 
     const handleInputs = (name: string, value: any) => {
         setForm({ ...form, [name]: name == "fecha" ? value?.toISOString() : value });
@@ -34,6 +35,10 @@ function ModalOrder(props: IModalOrder) {
             .catch(error => alert(error))
     }
 
+    const handleCheckbox = () => {
+        setForm({ ...form, incluirConsumoDiario: !form.incluirConsumoDiario });
+    }
+
 
     return (
         <Dialog open={props.open} onClose={props.onClose} >
@@ -42,9 +47,19 @@ function ModalOrder(props: IModalOrder) {
                 <FormControl>
                     <MuiPickersUtilsProvider utils={MomentUtils}>
                         <DatePicker value={form.fecha} onChange={(date) => handleInputs("fecha", date)} />
-                        <TextField label="Cod Suplidor" name="suplidor" value={form.suplidor} onChange={handleInputs} />
                         <TextField label="Cod Articulo" name="articulo" value={form.articulo} onChange={handleInputs} />
                         <TextField label="Cantidad" name="cantidad" value={form.cantidad} onChange={handleInputs} />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={form.incluirConsumoDiario}
+                                    onChange={handleCheckbox}
+                                    name="checkedB"
+                                    color="primary"
+                                />
+                            }
+                            label="Incluir consumo diario"
+                        />
                     </MuiPickersUtilsProvider>
 
                 </FormControl>

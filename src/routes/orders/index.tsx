@@ -3,7 +3,7 @@ import MaterialTable from "material-table";
 import { Grid, Paper, Button } from "@material-ui/core";
 import axios from "axios";
 //Modals
-import ModalNewSale from "./newSale";
+import ModalNewSale from "./newOrder";
 //Utils
 import { isMobile } from "../../utils/functions";
 
