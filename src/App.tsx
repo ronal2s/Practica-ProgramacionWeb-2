@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Divider, List } from '@material-ui/core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   BrowserRouter as Router, Switch, Route,
 } from "react-router-dom";
@@ -76,6 +79,7 @@ function App() {
             </ContentView>
           </NavigationView>
         </RowView>
+        <ToastContainer />
       </React.Fragment>
     </Router>
   );

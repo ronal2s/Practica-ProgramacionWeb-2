@@ -13,11 +13,11 @@ function Orders(props: any) {
     const [data, setdata] = useState([]);
 
     useEffect(() => {
-        // getData();
+        getData();
     }, [])
 
     const getData = () => {
-        axios.get("/ventas")
+        axios.get("/ordenes")
             .then(result => {
                 setdata(result.data)
             })
@@ -51,11 +51,12 @@ function Orders(props: any) {
                             columns={[
                                 // { title: "Código Movimiento", field: "codigo" },
                                 // { title: "Fecha", field: "fecha" },
-                                { title: "Suplidor", field: "codigoSuplido" },
+                                { title: "Suplidor", field: "codigoSuplidor" },
                                 { title: "Articulo", field: "codigoArticulo" },
                                 { title: "Cantidad", field: "cantidad", },
+                                { title: "Precio Compra", field: "precioCompra", },
+                                { title: "Fecha Estimada", field: "fechaEstimada", }
                                 // { title: "Fecha", field: "fecha", render: (rowData: { fecha: Date }) => new Date(rowData.fecha).toLocaleDateString() }
-                                { title: "Fecha", field: "fecha", }
                                 // { title: "Cantidad Entrada", field: "cantidad_entrada", },
                             ]}
                             isLoading={loading}

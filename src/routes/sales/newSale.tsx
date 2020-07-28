@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 
 import TextField from "../../components/_textField";
+import { toast } from "react-toastify";
 
 interface IModalSale {
     open: boolean,
@@ -22,22 +23,22 @@ function ModalSale(props: IModalSale) {
         // if (name == "date") {
         //     setForm({ ...form, [name]:  })
         // }
-        setForm({ ...form, [name]: name == "fecha" ? new Date(value?.toISOString()).toLocaleDateString() : value });
+        setForm({ ...form, [name]: name == "fecha" ? value?.toISOString() : value });
     }
 
     const makeSale = () => {
-        axios.get("/ventas/nueva", { params: {
-            cliente: form.cliente,
-            articulo: form.articulo,
-            cantidad: form.cantidad,
-            fecha: new Date(form.fecha).toLocaleDateString()
-        } })
+        axios.get("/ventas/nueva", {
+            params: {
+                cliente: form.cliente,
+                articulo: form.articulo,
+                cantidad: form.cantidad,
+                fecha: new Date(form.fecha).toLocaleDateString()
+            }
+        })
             .then(result => {
-                if (!result.data.error) {
-                    props.onClose();
-                } else {
-                    alert(result.data.msg)
-                }
+                const typeToast = result.data.error ? "error" : "success";
+                toast[typeToast](result.data.msg);
+                if (!result.data.error) props.onClose();
             })
             .catch(error => alert(error))
     }
@@ -58,7 +59,7 @@ function ModalSale(props: IModalSale) {
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="secondary" >Cerrar</Button>
+                <Button variant="outlined" color="secondary" onClick={() => props.onClose()} >Cerrar</Button>
                 <Button variant="contained" color="primary" onClick={makeSale} >OK</Button>
             </DialogActions>
         </Dialog>

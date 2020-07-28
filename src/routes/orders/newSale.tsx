@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button } from "@material-ui/core";
+import { toast } from 'react-toastify';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import {
@@ -16,17 +17,21 @@ interface IModalOrder {
 }
 
 function ModalOrder(props: IModalOrder) {
-    const [form, setForm] = useState({ articulo: "", suplidor: "", cantidad: "", fecha: new Date() });
+    const [form, setForm] = useState({ articulo: "ART-01", suplidor: "SUP-01", cantidad: "10", fecha: new Date() });
 
     const handleInputs = (name: string, value: any) => {
-        // if (name == "date") {
-        //     setForm({ ...form, [name]:  })
-        // }
-        setForm({ ...form, [name]: name == "fecha" ? new Date(value?.toISOString()).toLocaleDateString() : value });
+        setForm({ ...form, [name]: name == "fecha" ? value?.toISOString() : value });
     }
 
     const makeSale = () => {
-        alert("Workin in")
+        axios.get("/ordenes/nueva", { params: form })
+            .then(result => {
+                // alert(result.data.msg);
+                const typeToast = result.data.error ? "error" : "success";
+                toast[typeToast](result.data.msg);
+                if (!result.data.error) props.onClose();
+            })
+            .catch(error => alert(error))
     }
 
 
@@ -45,7 +50,7 @@ function ModalOrder(props: IModalOrder) {
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="secondary" >Cerrar</Button>
+                <Button variant="outlined" color="secondary" onClick={() => props.onClose()} >Cerrar</Button>
                 <Button variant="contained" color="primary" onClick={makeSale} >OK</Button>
             </DialogActions>
         </Dialog>

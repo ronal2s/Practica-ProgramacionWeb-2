@@ -10,16 +10,17 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/mydb";
 
 const { COLLECTIONS } = require("./utils/constants");
+const { convertJSONtoNormalDate } = require("./utils/functions");
 
 
 const data_articulos = [
-  { codigoArticulo: "ART-01", descripcion: "Keyboard", balanceActual: "5", unidadCompra: "100" },
-  { codigoArticulo: "ART-02", descripcion: "Mouse", balanceActual: "7", unidadCompra: "100" },
-  { codigoArticulo: "ART-03", descripcion: "Monitor", balanceActual: "3", unidadCompra: "2500" },
-  { codigoArticulo: "ART-04", descripcion: "Cable USB", balanceActual: "8", unidadCompra: "100" },
-  { codigoArticulo: "ART-05", descripcion: "Cable HDMI", balanceActual: "19", unidadCompra: "100" },
-  { codigoArticulo: "ART-06", descripcion: "Headphones", balanceActual: "11", unidadCompra: "800" },
-  { codigoArticulo: "ART-07", descripcion: "Alcatel", balanceActual: "23", unidadCompra: "2500" },
+  { codigoArticulo: "ART-01", descripcion: "Keyboard", balanceActual: 23, unidadCompra: "100" },
+  { codigoArticulo: "ART-02", descripcion: "Mouse", balanceActual: 7, unidadCompra: "100" },
+  { codigoArticulo: "ART-03", descripcion: "Monitor", balanceActual: 3, unidadCompra: "2500" },
+  { codigoArticulo: "ART-04", descripcion: "Cable USB", balanceActual: 8, unidadCompra: "100" },
+  { codigoArticulo: "ART-05", descripcion: "Cable HDMI", balanceActual: 19, unidadCompra: "100" },
+  { codigoArticulo: "ART-06", descripcion: "Headphones", balanceActual: 11, unidadCompra: "800" },
+  { codigoArticulo: "ART-07", descripcion: "Alcatel", balanceActual: 23, unidadCompra: "2500" },
 ]
 
 const data_ventas = [
@@ -35,13 +36,6 @@ const data_ventas = [
   { codigoArticulo: "ART-02", cantidad: 12, cliente: "José", fecha: "04/08/2020" },
   { codigoArticulo: "ART-02", cantidad: 17, cliente: "Luis", fecha: "09/08/2020" },
   { codigoArticulo: "ART-02", cantidad: 13, cliente: "Santos", fecha: "09/08/2020" },
-  // {
-  //   _id: "5f1f54332db579308403d8b7",
-  //   codigoArticulo: "ART-01",
-  //   cantidad: "2",
-  //   cliente: "bbbbb",
-  //   fecha: "27/7/2020"
-  //   }
 ]
 
 
@@ -78,14 +72,16 @@ MongoClient.connect(url, function (err, db) {
   deleteCollection(COLLECTIONS.ARTICULOS, dbo);
   deleteCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
   deleteCollection(COLLECTIONS.VENTAS, dbo);
+  deleteCollection(COLLECTIONS.ORDENES, dbo);
 
+  createCollection(COLLECTIONS.ORDENES, dbo);
   createCollection(COLLECTIONS.VENTAS, dbo);
   createCollection(COLLECTIONS.ARTICULOS, dbo);
   createCollection(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo);
 
   putData(COLLECTIONS.ARTICULOS, dbo, data_articulos);
   putData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, data_articulo_suplidor);
-  putData(COLLECTIONS.VENTAS, dbo, data_ventas);
+  // putData(COLLECTIONS.VENTAS, dbo, data_ventas);
 
   app.get("/inventario", (req, res) => {
     getData(COLLECTIONS.ARTICULOS, dbo, (result) => res.send(result));
@@ -118,7 +114,7 @@ MongoClient.connect(url, function (err, db) {
           updateItem(COLLECTIONS.ARTICULOS, dbo, obj, (result) => {
             const obj = { codigoArticulo: articulo, cantidad: parseInt(cantidad), cliente, fecha }
             putData(COLLECTIONS.VENTAS, dbo, obj, (result) => {
-              res.send({ error: false, ...result })
+              res.send({ error: false, msg: "Venta realizada", ...result })
             })
           })
         } else {
@@ -128,19 +124,55 @@ MongoClient.connect(url, function (err, db) {
     })
   });
 
+  app.get("/ordenes", (req, res) => {
+    getData(COLLECTIONS.ORDENES, dbo, (result) => {
+      res.send(result);
+    })
+  })
 
-  getData(COLLECTIONS.ARTICULOS, dbo);
-  // db.close();
-});
+  app.get("/ordenes/nueva", (req, res) => {
+    const { fecha, articulo, suplidor, cantidad } = req.query;
+    // console.log(req.query)
+    dbo.collection(COLLECTIONS.ARTICULOS_SUPLIDOR).find({ codigoArticulo: articulo }).toArray()
+      .then(result => {
+        // console.log(result)
+        let fechaRequest = convertJSONtoNormalDate(new Date(fecha).toJSON());
+        // fechaRequest = convertJSONtoNormalDate(fechaRequest.toJSON());
+        for (let i = 0; i < result.length; i++) {
+          const element = result[i];
+          let fechaFutura = new Date().setDate(new Date().getDate() + element.tiempoEntrega)
+          fechaFutura = convertJSONtoNormalDate(new Date(fechaFutura).toJSON())
+          console.log(fechaRequest, fechaFutura)
+          if (fechaRequest == fechaFutura) {
+            console.log("Suplidor disponible: ", element)
+            const requestData = {
+              codigoArticulo: element.codigoArticulo,
+              codigoSuplidor: element.codigoSuplidor,
+              tiempoEntrega: element.tiempoEntrega,
+              precioCompra: element.precioCompra,
+              fechaEstimada: fechaFutura,
+              cantidad
+            }
+            putData(COLLECTIONS.ORDENES, dbo, requestData, (result) => {
+              res.send({ error: false, msg: "Orden realizada" });
+            });
+            break;
+          } else {
+            res.send({ error: true, msg: "No hay suplidor disponible para esa fecha" });
+            break;
+          }
+        }
+      })
+  });
+})
+
 
 const getConsumos = (dbo, callback) => {
   dbo.collection(COLLECTIONS.VENTAS).aggregate([
-    // { $group: { _id: { codigoArticulo: "$codigoArticulo", fecha: "$fecha" }, total: { $sum: "$cantidad" } } },
-    { $group: { _id: "$codigoArticulo", avgQuantity: { $avg: "$cantidad"}, } },
+    { $group: { _id: "$codigoArticulo", avgQuantity: { $avg: "$cantidad" }, } },
   ]).toArray()
     .then(result => {
       callback(result);
-      // res.send(result);
     })
     .catch(error => console.error(error))
 }
