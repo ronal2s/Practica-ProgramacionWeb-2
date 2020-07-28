@@ -25,7 +25,16 @@ const data_articulos = [
 const data_ventas = [
   { codigoArticulo: "ART-01", cantidad: 2, cliente: "Juan", fecha: "04/08/2020" },
   { codigoArticulo: "ART-01", cantidad: 1, cliente: "Pedro", fecha: "09/08/2020" },
-  { codigoArticulo: "ART-01", cantidad: 4, cliente: "Miguel", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 3, cliente: "Miguel", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 7, cliente: "José", fecha: "04/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 8, cliente: "Luis", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-01", cantidad: 10, cliente: "Santos", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 2, cliente: "Juan", fecha: "04/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 4, cliente: "Pedro", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 8, cliente: "Miguel", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 12, cliente: "José", fecha: "04/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 17, cliente: "Luis", fecha: "09/08/2020" },
+  { codigoArticulo: "ART-02", cantidad: 13, cliente: "Santos", fecha: "09/08/2020" },
   // {
   //   _id: "5f1f54332db579308403d8b7",
   //   codigoArticulo: "ART-01",
@@ -76,7 +85,7 @@ MongoClient.connect(url, function (err, db) {
 
   putData(COLLECTIONS.ARTICULOS, dbo, data_articulos);
   putData(COLLECTIONS.ARTICULOS_SUPLIDOR, dbo, data_articulo_suplidor);
-  // putData(COLLECTIONS.VENTAS, dbo, data_ventas);
+  putData(COLLECTIONS.VENTAS, dbo, data_ventas);
 
   app.get("/inventario", (req, res) => {
     getData(COLLECTIONS.ARTICULOS, dbo, (result) => res.send(result));
@@ -126,13 +135,14 @@ MongoClient.connect(url, function (err, db) {
 
 const getConsumos = (dbo, callback) => {
   dbo.collection(COLLECTIONS.VENTAS).aggregate([
-    { $group: { _id: { codigoArticulo: "$codigoArticulo", fecha: "$fecha" }, total: { $sum: "$cantidad" } } }
+    // { $group: { _id: { codigoArticulo: "$codigoArticulo", fecha: "$fecha" }, total: { $sum: "$cantidad" } } },
+    { $group: { _id: "$codigoArticulo", avgQuantity: { $avg: "$cantidad"}, } },
   ]).toArray()
     .then(result => {
       callback(result);
       // res.send(result);
     })
-    .catch(error => alert(error))
+    .catch(error => console.error(error))
 }
 
 

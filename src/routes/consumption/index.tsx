@@ -37,9 +37,9 @@ function ProductsSupplier(props: any) {
                                 search: false
                             }}
                             columns={[
-                                { title: "Codigo Articulo", field: "codigo_articulo", render: (rowData: { _id: any }) => rowData._id.codigoArticulo },
-                                { title: "Cantidad", field: "total" },
-                                { title: "Fecha", field: "fecha", render: (rowData: { _id: any }) => rowData._id.fecha },
+                                { title: "Codigo Articulo", field: "_id" },
+                                { title: "Promedio", field: "avgQuantity", render: (rowData: any) => Math.round(rowData.avgQuantity) },
+                                // { title: "Fecha", field: "fecha", render: (rowData: { _id: any }) => rowData._id.fecha },
                             ]}
                             isLoading={loading}
                             data={data}
