@@ -1,0 +1,30 @@
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.align-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hide {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.separator {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.align-right {
+    text-align: right;
+    margin-right: 10px;
+}
