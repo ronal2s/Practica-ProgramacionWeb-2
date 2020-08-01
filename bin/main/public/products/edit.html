@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="/public/layout.html::header">
+    <title>Home</title>
+</head>
+<body>
+<!--    Card Login-->
+<div class="center-content" >
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <form action="/products/edit" method="post">
+                <h5 >New product</h5>
+                <div class="input-group mb-3">
+                    <input  aria-describedby="basic-addon1" name="id"
+                           placeholder="ID" th:value="${product.id}"
+                           type="text" class="hide" >
+                </div>
+                <div class="input-group mb-3">
+                    <input aria-describedby="basic-addon1" class="form-control" name="name"
+                           placeholder="Name" th:value="${product.name}"
+                           type="text">
+                </div>
+                <div class="input-group mb-3">
+                    <input aria-describedby="basic-addon1" class="form-control" name="price"
+                           placeholder="Price" th:value="${product.price}"
+                           type="text">
+                </div>
+                <button class="btn btn-secondary" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<div th:insert="/public/layout.html::javascript"></div>
+</html>
