@@ -49,7 +49,7 @@ public class Main {
             config.addStaticFiles("/public"); //desde la carpeta de resources
             config.registerPlugin(new RouteOverviewPlugin("/rutas")); //aplicando plugins de las rutas
             config.enableCorsForAllOrigins();
-        }).start(getHerokuAssignedPort());
+        }).start(4000);
 
         System.out.println("Server running on: http://localhost:4001/");
 
@@ -70,6 +70,6 @@ public class Main {
         if (processBuilder.environment().get("PORT") != null) {
             return Integer.parseInt(processBuilder.environment().get("PORT"));
         }
-        return 4001; //Retorna el puerto asignado si no se usa Heroku
+        return 7000; //Retorna el puerto asignado si no se usa Heroku
     }
 }
